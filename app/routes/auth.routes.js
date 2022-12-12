@@ -10,6 +10,10 @@ module.exports = function(app) {
     next();
   });
 
+  app.get('/signin', function(req, res) {
+    res.render('signin.html');
+  });
+
   app.post(
     "/api/auth/signup",
     [
