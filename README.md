@@ -1,9 +1,9 @@
-# simple-jwt-nodejs-sequelize
+# Projet JS
  
-Fork project
+Initialisation :
 
 npm install
 
-install nodemon if you want to
+Pour lancer :
 
-test routes to connect & merge this project with yours
+node server.js ou nodemon server.js si nodemon est installé.
