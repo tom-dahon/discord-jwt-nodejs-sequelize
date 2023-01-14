@@ -2,6 +2,60 @@ const form = document.querySelector("form")
 const chatMessages = document.querySelector(".chat__messages")
 const input = document.querySelector(".sendMessage")
 
+//https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
+
+function init() {
+  console.log("d");
+}
+
+setCookie('username','je suis le premier cookie',1);
+
+
+if(checkCookie()==null){
+  window.location.href = "http://127.0.0.1:5500/Front/signup.html";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function checkCookie() {
+  let username = getCookie("username");
+  if (username != "") {
+   return(username);
+  } else {
+    if (username != "" && username != null) {
+      //setCookie("username", username, 365);
+      return null;
+    }
+  }
+}
+
+function logout()
+{
+  setCookie('username','',0);
+  window.location.href = "http://127.0.0.1:5500/Front/signin.html";
+}
+
 form.addEventListener("submit", sendMessage)
 
 function sendMessage(e) {
@@ -12,7 +66,7 @@ function sendMessage(e) {
         messageDiv.className = "message"
 
         var avatar = document.createElement("img")
-        avatar.src = "assets/user4.jpg"
+        avatar.src = "assets/avatar.png"
 
         var messageInfo = document.createElement("div")
         messageInfo.className = "message__info"
@@ -45,17 +99,3 @@ function sendMessage(e) {
         chatMessages.scrollBy(0, 10000)
     }
 }
-
-fetch(url)
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      let authors = data;
-
-      authors.map(function(author) {
-        let li = document.createElement('li');
-        let name = document.createElement('h2');
-        let email = document.createElement('span');
-      });
-    })
