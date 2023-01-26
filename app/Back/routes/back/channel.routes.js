@@ -22,4 +22,15 @@ module.exports = function(app) {
     controller.getMessagesFromChannel
   );
 
+  app.post(
+    "/api/channels/:channelId/sendMessage",
+    [authJwt.verifyToken],
+    controller.sendMessage
+  );
+
+  app.post("/api/channels/createChannel",
+  [authJwt.verifyToken],
+  controller.createChannel
+  );
+
 };

@@ -1,6 +1,15 @@
-const db = require("../../models");
+const db = require("../models");
 const User = db.user;
 const Message = db.message;
+const Channel = db.channel;
+
+exports.createChannel = (req, res) => {
+    Channel.create({
+        name: req.body.name
+    }).then(channel => {
+        res.status(200).send(channel);
+    });
+};
 
 exports.getChannels = (req, res) => {
     User.findOne({
@@ -28,5 +37,15 @@ exports.getMessagesFromChannel = (req, res) => {
             return res.status(404).send({message: "Aucun message n'a été trouvé."})
         }
         return res.status(200).send(messages);
+    });
+};
+
+exports.sendMessage = (req, res) => { 
+    Message.create({
+        text: req.body.text,
+        userId: req.body.userId,
+        channelId: req.params.channelId 
+    }).then(message => {
+        return res.status(200).send(message);
     });
 };
