@@ -16,4 +16,10 @@ module.exports = function(app) {
     controller.getChannels
   );
 
+  app.get(
+    "/api/channels/:channelId/messages",
+    [authJwt.verifyToken],
+    controller.getMessagesFromChannel
+  );
+
 };

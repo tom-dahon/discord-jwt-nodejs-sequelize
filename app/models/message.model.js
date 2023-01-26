@@ -8,6 +8,12 @@ module.exports = (sequelize, Sequelize) => {
       text: {
         type: Sequelize.STRING
       },
+      userId: {
+        type: Sequelize.INTEGER
+      },
+      channelId: {
+        type: Sequelize.INTEGER
+      }
     });
   
     return Message;
