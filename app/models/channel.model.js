@@ -1,15 +1,15 @@
 module.exports = (sequelize, Sequelize) => {
-    const Message = sequelize.define("messages", {
+    const Channel = sequelize.define("channels", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      text: {
+      name: {
         type: Sequelize.STRING
       },
     });
   
-    return Message;
+    return Channel;
   };
   
