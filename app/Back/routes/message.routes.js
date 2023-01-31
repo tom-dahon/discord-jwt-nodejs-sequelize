@@ -1,5 +1,5 @@
 const { authJwt } = require("../middleware");
-const controller = require("../controllers/channel.controller");
+const controller = require("../controllers/message.controller");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -10,21 +10,16 @@ module.exports = function(app) {
     next();
   });
 
-  app.get(
-    "/api/channels",
+  app.post(
+    "/api/channels/:channelId/sendMessage",
     [authJwt.verifyToken],
-    controller.getChannels
+    controller.sendMessage
   );
 
-  app.get(
-    "/api/channels/:channelId/messages",
+  app.delete(
+    "/api/messages/deleteMessage",
     [authJwt.verifyToken],
-    controller.getMessagesFromChannel
-  );
-
-  app.post("/api/channels/createChannel",
-  [authJwt.verifyToken],
-  controller.createChannel
+    controller.deleteMessage
   );
 
 };

@@ -19,6 +19,7 @@ exports.createChannel = (req, res) => {
     });
 };
 
+
 exports.getUsersFromChannel = (req, res) => {
     ChannelUsers.findAll({
         where: {
