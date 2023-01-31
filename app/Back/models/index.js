@@ -28,6 +28,7 @@ db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.message = require("../models/message.model.js")(sequelize, Sequelize);
 db.channel = require("../models/channel.model")(sequelize, Sequelize);
+db.channel_users = require("../models/channel_users.model")(sequelize, Sequelize);
 
 db.user.belongsToMany(db.channel, {
   through: "channel_users",

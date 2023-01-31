@@ -19,7 +19,7 @@ app.use(express.static(__dirname));
 app.use(express.urlencoded({ extended: true }));
 
 // database
-const db = require("./app/models");
+const db = require("./app/Back/models");
 const Role = db.role;
 
 db.sequelize.sync();
@@ -35,9 +35,9 @@ app.get("/", (req, res) => {
 });
 
 // routes
-require('./app/routes/back/auth.routes')(app);
-require('./app/routes/back/user.routes')(app);
-require('./app/routes/back/channel.routes')(app);
+require('./app/Back/routes/auth.routes')(app);
+require('./app/Back/routes/user.routes')(app);
+require('./app/Back/routes/channel.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
