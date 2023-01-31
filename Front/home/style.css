@@ -75,7 +75,7 @@ img {
 }
 
 .sidebar__top {
-    display: flex;
+    display:flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
@@ -222,7 +222,23 @@ img {
 .btn{
     margin: 5px;
 }
+.userPlus{
+border:none;
+color: inherit;
+cursor: pointer;
+background: none;
+}
 
+.select2-selection__choice{
+    background-color: var(--bs-gray-200);
+    border: none !important;
+    font-size: 12px;
+    font-size: 0.85rem !important;
+}
+
+.endDiv{
+    align-items: flex-end;
+}
 .chat {
     display: flex;
     flex-direction: column;
@@ -357,6 +373,7 @@ img {
 
     .chatHeader {
         justify-content: center;
+        flex-direction: row;
     }
 
     .chatHeader__left {

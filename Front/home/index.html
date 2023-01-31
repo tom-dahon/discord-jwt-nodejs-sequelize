@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discord</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://kit.fontawesome.com/0fba5e202d.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--Select Menu-->
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <!-- Or for RTL support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <div class="servers">
+      <div class="logo">
+        <img src="../assets/logo.jpg" alt="Discord" />
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="sidebar__top">
+        <input type="text" placeholder="Find or start a conversation" />
+      </div>
+      <div class="sidebar__icon">
+        <i class="fa-solid fa-users"></i>
+        <span>Friends</span>
+      </div>
+      <div class="sidebar__icon">
+        <i class="fas fa-compact-disc fa-lg"></i>
+        <span>Nitro</span>
+      </div>
+      <div class="sidebar_users">
+        <div class="sidebar__usersHeader">
+          <div class="sidebar__header">
+            <h4>Direct messages</h4>
+          </div>
+          <i class="fas fa-plus sidebar__addUser"></i>
+        </div>
+        <div>
+          <div class="sidebar__user">
+            <div>
+              <span class="status"></span>
+              <img src="../assets/avatar.png" alt="avatar" />
+            </div>
+            <h4>Hacker</h4>
+          </div>
+          <div class="sidebar__user">
+            <div>
+              <span class="status"></span>
+              <img src="../assets/avatar.png" alt="avatar" />
+            </div>
+            <h4>E-Girl</h4>
+          </div>
+          <div class="sidebar__user">
+            <div>
+              <span class="status"></span>
+              <img src="../assets/avatar.png" alt="avatar" />
+            </div>
+            <h4>ManInBlack</h4>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar__profile">
+        <div>
+          <span class="status"></span>
+          <img src="../assets/avatar.png" alt="avatar" />
+        </div>
+        <div class="sidebar__profileInfo">
+          <h3>Gamer</h3>
+          <p>#1234</p>
+        </div>
+        <div class="sidebar__profileIcons">
+          <i class="fas fa-microphone"></i>
+          <i class="fas fa-headset"></i>
+          <i class="fas fa-cog"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat">
+      <div>
+        <div class="chatHeader">
+          <div class="chatHeader__left">
+            <span class="chatHeader__Dm">@</span>
+            <h3>ManInBlack</h3>
+          </div>
+          <div class="endDiv">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <i class="fa-solid fa-user-plus"></i>
+            </button>
+            <button onclick="logout()" type="button" class="btn btn-dark btn-sm flex-row-reverse">LOGOUT</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat__messages">
+          <div class="message">
+              <img src="../assets/avatar.png" alt="avatar">
+              <div class="message__info">
+                  <h4>ManInBlack <span class="message__timestamp">04/28/2022</span></h4>
+                  <p>Hello</p>
+              </div>
+          </div>
+      </div>
+
+      <div class="chat__input">
+        <i class="fas fa-plus-circle fa-lg"></i>
+        <form>
+            <input class="sendMessage" type="text" placeholder="send message">
+            <button class="chat__inputButton" type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Boostrap -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+
+            <h2>Nom du groupe</h2>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+              <label for="floatingInput">Team</label>
+            </div>
+
+            <h2>Ajout d'un Utilisateur</h2>
+            
+            <form class="was-validated mb-3">
+              <select class="form-select" data-placeholder="Choose anything" id="valid-was-validated-multiple-field" multiple>
+                  <option>Christmas Island</option>
+                  <option>South Sudan</option>
+                  <option>Jamaica</option>
+                  <option>Kenya</option>
+              </select>
+            </form>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./main.js"></script>
+  </body>
+</html>

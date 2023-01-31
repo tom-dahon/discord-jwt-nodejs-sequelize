@@ -8,12 +8,12 @@ function init() {
   console.log("d");
 }
 
-setCookie('username','je suis le premier cookie',1);
+// setCookie('username','je suis le premier cookie',1);
 
 
-if(checkCookie()==null){
-  window.location.href = "http://127.0.0.1:5500/Front/signup.html";
-}
+// if(checkCookie()==null){
+//   window.location.href = "http://127.0.0.1:5500/Front/signup.html";
+// }
 
 function getCookie(cname) {
   let name = cname + "=";
@@ -50,6 +50,11 @@ function checkCookie() {
   }
 }
 
+
+function addConv(){
+  console.log("zfefze")
+}
+
 function logout()
 {
   setCookie('username','',0);
@@ -66,7 +71,7 @@ function sendMessage(e) {
         messageDiv.className = "message"
 
         var avatar = document.createElement("img")
-        avatar.src = "assets/avatar.png"
+        avatar.src = "../assets/avatar.png"
 
         var messageInfo = document.createElement("div")
         messageInfo.className = "message__info"
@@ -99,3 +104,27 @@ function sendMessage(e) {
         chatMessages.scrollBy(0, 10000)
     }
 }
+
+
+$( '#valid-was-validated-single-field' ).select2( {
+  theme: "bootstrap-5",
+  width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+  placeholder: $( this ).data( 'placeholder' ),
+} );
+
+$( '#valid-was-validated-multiple-field' ).select2( {
+  theme: "bootstrap-5",
+  width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+  placeholder: $( this ).data( 'placeholder' ),
+  closeOnSelect: false,
+} );
+
+$(document).ready(function() {
+
+  $("#valid-was-validated-multiple-field").on("change", function() {
+    $(this).find("option:selected").each(function() {
+      console.log(this.text);
+    });
+  })
+
+});
