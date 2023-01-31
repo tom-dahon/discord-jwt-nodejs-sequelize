@@ -10,6 +10,12 @@ module.exports = function(app) {
     next();
   });
 
+  app.get(
+    "/api/channels/:channelId/messages",
+    [authJwt.verifyToken],
+    controller.getMessagesFromChannel
+  );
+
   app.post(
     "/api/channels/:channelId/sendMessage",
     [authJwt.verifyToken],

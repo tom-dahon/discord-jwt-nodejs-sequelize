@@ -48,26 +48,3 @@ exports.getChannels = (req, res) => {
       })
     });
 };
-
-exports.getMessagesFromChannel = (req, res) => {
-    Message.findAll({
-        where: {
-            channelId: req.params.channelId
-        }
-    }).then(messages => {
-        if(!messages) {
-            return res.status(404).send({message: "Aucun message n'a été trouvé."})
-        }
-        return res.status(200).send(messages);
-    });
-};
-
-exports.sendMessage = (req, res) => { 
-    Message.create({
-        text: req.body.text,
-        userId: req.body.userId,
-        channelId: req.params.channelId 
-    }).then(message => {
-        return res.status(200).send(message);
-    });
-};
