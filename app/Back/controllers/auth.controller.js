@@ -50,7 +50,6 @@ exports.signin = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
-
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
@@ -62,7 +61,7 @@ exports.signin = (req, res) => {
           message: "Invalid Password!"
         });
       }
-
+      
       var token = jwt.sign({ username: user.username }, config.secret, {
         expiresIn: 86400 // 24 hours
       });
@@ -82,6 +81,7 @@ exports.signin = (req, res) => {
       });
     })
     .catch(err => {
-      res.status(500).send({ message: err.message });
+      console.log(req.body);
+      res.status(500).send({ message: req.body });
     });
 };

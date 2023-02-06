@@ -1,0 +1,11 @@
+body {
+    background-image: url("../assets/signin-background.jpg");
+}
+
+#form_frame {
+    background-color: #343A3F;
+}
+
+button {
+    background-color: #6E89E0 !important;
+}

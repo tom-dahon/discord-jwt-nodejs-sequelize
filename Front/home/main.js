@@ -12,7 +12,7 @@ var id;
 window.onload=init;
 
 function init() {
-  setCookie('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJlbiIsImlhdCI6MTY3NTQzMTI1MiwiZXhwIjoxNjc1NTE3NjUyfQ.9j7hZ-cPhcT1mHaeFSltcrAGBlqYzuqbtKpCHOpQWQg',1);
+  setCookie('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRvbSIsImlhdCI6MTY3NTY3NzMzMSwiZXhwIjoxNjc1NzYzNzMxfQ.bNWo9-SJebu1yTii6AYhLs6qqXMQGblAwrWvr58x7lw',1);
   getChannels();
 }
 
@@ -57,8 +57,8 @@ function checkCookie() {
 
 function logout()
 {
-  setCookie('username','',0);
-  window.location.href = "http://127.0.0.1:5500/Front/signin.html";
+  setCookie('token','',0);
+  window.location.href = "/Front/signin/signin.html";
 }
 
 form.addEventListener("submit", sendMessage)
@@ -104,7 +104,7 @@ async function sendMessage(e) {
         // chatMessages.scrollBy(0, 10000)
 
         //enregistrement du message au niveau du backend
-        var url='http://localhost:8080/api/channels/'+id+'/sendMessage';
+        var url='/api/channels/'+id+'/sendMessage';
         const data = { "text": input.value,"userId": id };
         
         var myHeaders = new Headers();
