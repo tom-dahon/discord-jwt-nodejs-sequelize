@@ -1,11 +1,15 @@
 const db = require("../models");
 const Message = db.message;
+const User = db.user;
 
 exports.getMessagesFromChannel = (req, res) => {
     Message.findAll({
         where: {
             channelId: req.params.channelId
-        }
+        },
+        order: [
+            ['createdAt', 'ASC']
+        ]
     }).then(messages => {
         if(!messages) {
             return res.status(404).send({message: "Aucun message n'a été trouvé."})
@@ -32,4 +36,14 @@ exports.deleteMessage = (req, res) => {
         message.destroy();
         return res.status(200).send("Message supprimé");
     });
+};
+
+exports.getSender = (req, res) => {
+    User.findByPk(req.params.userId)
+        .then(user => {
+            if(!user) {
+                return res.status(404).send({ message: "Aucun utilisateur n'a été trouvé" });
+            }
+            return res.status(200).send(user);
+        });
 };

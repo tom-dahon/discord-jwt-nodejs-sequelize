@@ -26,6 +26,7 @@ async function signIn(e) {
         if(res.status == 200) {
           let infos = await res.json();
         setCookie('token', infos.accessToken, 1);
+        setCookie('userId', infos.id, 1);
         window.location.replace('../home/index.html');
         } else {
           form_error.classList.replace('d-none','d-block');

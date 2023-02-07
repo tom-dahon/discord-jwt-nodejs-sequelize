@@ -8,15 +8,31 @@ const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
+//Pour valider le format de l'adresse mail
+function validateEmail(email) {
+
+  let validRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (email.match(validRegex)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 exports.signup = (req, res) => {
-  // Save User to Database
+  if(validateEmail(req.body.email)) {
+
   User.create({
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8)
   })
     .then(user => {
-      if (req.body.roles) {
+      let token = jwt.sign({ username: user.username }, config.secret, {
+        expiresIn: 86400 // 24 hours
+      });
+      /*if (req.body.roles) {
         Role.findAll({
           where: {
             name: {
@@ -25,19 +41,33 @@ exports.signup = (req, res) => {
           }
         }).then(roles => {
           user.setRoles(roles).then(() => {
-            res.send({ message: "User registered successfully!" });
+            res.status(200).send({
+              message: "User registered successfully!",
+              accessToken: token
+            });
           });
         });
       } else {
         // user role = 1
-        user.setRoles([1]).then(() => {
-          res.send({ message: "User registered successfully!" });
+        user.setRoles([0]).then(() => {
+          res.status(200).send({
+            message: "User registered successfully!",
+            accessToken: token
+          });
         });
-      }
+      }*/
+      res.status(200).send({
+        message: "User registered successfully!",
+        accessToken: token
+      });
     })
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
+  } else {
+    res.status(422).send({message: "Format de l'email incorrect",});
+  }
+    
 };
 
 exports.signin = (req, res) => {
@@ -62,7 +92,7 @@ exports.signin = (req, res) => {
         });
       }
       
-      var token = jwt.sign({ username: user.username }, config.secret, {
+      let token = jwt.sign({ username: user.username }, config.secret, {
         expiresIn: 86400 // 24 hours
       });
 

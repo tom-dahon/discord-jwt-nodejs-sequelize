@@ -1,10 +1,10 @@
 import { setCookie } from '../cookies.js';
 
 const form = document.querySelector("form");
-const email = document.querySelector("#username");
+const email = document.querySelector("#email");
 const username = document.querySelector("#username");
 const password = document.querySelector("#password");
-const form_error = document.querySelector("#form_error");
+const email_error = document.querySelector("#email_error");
 
 form.addEventListener("submit", signUp);
 
@@ -27,8 +27,10 @@ async function signUp(e) {
           let infos = await res.json();
         setCookie('token', infos.accessToken, 1);
         window.location.replace('../home/index.html');
-        } else {
-          form_error.classList.replace('d-none','d-block');
+        } else if(res.status == 422) {
+            email.classList.add('border', 'border-danger');
+            email.focus();
+            email_error.classList.replace('d-none','d-block');
         }
         
 }

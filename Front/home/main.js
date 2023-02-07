@@ -2,76 +2,80 @@
 import { getCookie, checkCookie, setCookie } from '../cookies.js';
 const form = document.querySelector("form")
 const chatMessages = document.querySelector(".chat__messages")
-const input = document.querySelector(".sendMessage")
+const input = document.querySelector(".sendMessage");
+const logoutButton = document.querySelector("#logout");
 
 //Channels
 const divSideBarUsers = document.getElementById("sidebarConv")
-var id;
+let id;
+let currentChannel;
+let userId;
 
 
 //https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
 window.onload=init;
 
-function init() {
-  setCookie('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRvbSIsImlhdCI6MTY3NTY3NzMzMSwiZXhwIjoxNjc1NzYzNzMxfQ.bNWo9-SJebu1yTii6AYhLs6qqXMQGblAwrWvr58x7lw',1);
+
+async function getUsers() {
+  var headers = new Headers();
+  headers.append("x-access-token", getCookie('token'));
+  headers.append("Content-Type","application/json");
+
+  var requestOptions = {
+    method: 'GET',
+    headers: headers,
+  };
+
+  let res = await fetch('/api/users/all/'+userId, requestOptions)
+  .catch(err =>{
+    console.log(err)
+  });
+  if(res.status == 200) {
+    let users = await res.json();
+    return users;
+  }
+  
+}
+
+async function init() {
   getChannels();
+  userId = getCookie('userId');
+  let users = await getUsers();
+  console.log(users);
+  users.forEach(user => {
+    //Ajouter une option dans le select pour chaque user
+    let userOption = document.createElement("option");
+    userOption.id = user.id;
+    userOption.innerHTML = user.username;
+    document.querySelector("#valid-was-validated-multiple-field").appendChild(userOption);
+  });
+
+  console.log(users);
 }
 
 // if(checkCookie()==null){
 //   window.location.href = "http://127.0.0.1:5500/Front/signup.html";
 // }
 
+logoutButton.addEventListener("click", logout)
+
 function logout()
 {
-  setCookie('token','',0);
+  setCookie('token','',-1);
+  setCookie('userId', '', -1);
   window.location.href = "/Front/signin/signin.html";
 }
 
 form.addEventListener("submit", sendMessage)
 
+
 async function sendMessage(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     if(input.value !== "") {
-        // var messageDiv = document.createElement("div")
-        // messageDiv.className = "message"
-
-        // var avatar = document.createElement("img")
-        // avatar.src = "../assets/avatar.png"
-
-        // var messageInfo = document.createElement("div")
-        // messageInfo.className = "message__info"
-
-        // var userInfo = document.createElement("h4")
-        // userInfo.innerHTML = "Gamer"
-
-        // var messageTimestamp = document.createElement("span")
-        // messageTimestamp.className = "message__timestamp"
-
-        // const date = new Date()
-        // const year = date.getFullYear()
-        // const month = String(date.getMonth()).padStart(2, "0")
-        // const day = String(date.getDate()).padStart(2, "0")
-
-        // messageTimestamp.innerHTML = month + "/" + day + "/" + year
-
-        // const message = document.createElement("p")
-        // message.innerHTML = input.value
-        // input.value = ""
-
-        // userInfo.appendChild(messageTimestamp)
-        // messageInfo.appendChild(userInfo)
-        // messageInfo.appendChild(message)
-
-        // messageDiv.appendChild(avatar)
-        // messageDiv.appendChild(messageInfo)
-
-        // chatMessages.appendChild(messageDiv)
-        // chatMessages.scrollBy(0, 10000)
-
-        //enregistrement du message au niveau du backend
+        //Enregistrement du message au niveau du backend
         var url='/api/channels/'+id+'/sendMessage';
-        const data = { "text": input.value,"userId": id };
+        const data = { "text": input.value,"userId": userId };
         
         var myHeaders = new Headers();
         myHeaders.append("x-access-token", getCookie('token'));
@@ -83,8 +87,6 @@ async function sendMessage(e) {
           body: JSON.stringify(data),
         };
         
-          
-
         let res = await fetch(url,requestOptions)
         .catch(err =>{
           console.log(err)
@@ -94,7 +96,7 @@ async function sendMessage(e) {
 
         if (res.ok)
         {
-          getMessage(id);
+          getMessage(currentChannel);
         }
     }
 }
@@ -134,21 +136,22 @@ var requestOptions = {
   headers: myHeaders,
 };
 
-let res = await fetch("http://localhost:8080/api/channels", requestOptions)
+let res = await fetch("/api/channels", requestOptions)
 .catch(err =>{
   console.log(err)
    dispatch(loginFailed())
 });
 
 var data = await res.json();
-var data2= Object.entries(data)
 
-data.forEach(obj => {
-      console.log(`${obj.createdAt}`);
+data.forEach(channel => {
+      console.log(`${channel.createdAt}`);
 
       const divConv = document.createElement('div')
+      divConv.id = 'channel'+channel.id; // L'id de chaque div de channel sera channel{id}
+      divConv.addEventListener('click', () => getMessage(channel))
+
       divConv.setAttribute('class','sidebar__user')
-      divConv.onclick=getMessage;
       const div = document.createElement('div')
       const span = document.createElement('span')
       span.setAttribute('class','status')
@@ -157,11 +160,11 @@ data.forEach(obj => {
       logo.alt = 'avatar'
       logo.style.pointerEvents= 'none';
       const h4= document.createElement('h4')
-      h4.textContent= obj.name
+      h4.textContent= channel.name
       h4.style.pointerEvents= 'none';
       const p = document.createElement('p')
       p.setAttribute('id','id')
-      p.innerText= obj.id
+      p.innerText= channel.id
       p.hidden = true;
       
       div.appendChild(span)
@@ -173,14 +176,11 @@ data.forEach(obj => {
 })}
 
 //RECUPERATION DES MESSAGES POUR UNE CONVERSTION DONNEE
-async function getMessage(event){
-  console.log(event)
-  if(isNaN(event) == true)
-  {
-    id = event.target.querySelector('p').innerHTML;
-  }
-  console.log(typeof(id))
-  var url= 'http://localhost:8080/api/channels/'+id+'/messages'
+async function getMessage(channel){
+  id = channel.id;
+  currentChannel = channel;
+  document.getElementById('channelName').innerText = channel.name
+  var url= '/api/channels/'+channel.id+'/messages'
   var myHeaders = new Headers();
   myHeaders.append("x-access-token", getCookie('token'));
   myHeaders.append("Content-Type","application/json");
@@ -197,15 +197,13 @@ async function getMessage(event){
   });
 
   var data = await res.json();
-  var data2= Object.entries(data)
-
   //enlever tous les messages
   document.querySelectorAll(".message").forEach(el => el.remove());
 
  if (data != null){
-  data.forEach(obj => {
-    console.log(`${obj.createdAt}`);
-
+  data.forEach(async obj => {
+    
+    let user = await getUser(obj.userId);
     var messageDiv = document.createElement("div")
     messageDiv.className = "message"
 
@@ -216,7 +214,7 @@ async function getMessage(event){
     messageInfo.className = "message__info"
 
     var userInfo = document.createElement("h4")
-    userInfo.innerHTML = obj.userId
+    userInfo.innerHTML = user.username
 
     var messageTimestamp = document.createElement("span")
     messageTimestamp.className = "message__timestamp"
@@ -226,7 +224,7 @@ async function getMessage(event){
     const month = String(date.getMonth()).padStart(2, "0")
     const day = String(date.getDate()).padStart(2, "0")
 
-    messageTimestamp.innerHTML = obj.updatedAt
+    messageTimestamp.innerHTML = obj.createdAt
 
     const message = document.createElement("p")
     message.textContent = obj.text
@@ -243,4 +241,25 @@ async function getMessage(event){
 
   })
  }
+}
+
+async function getUser(userId) {
+  var headers = new Headers();
+  headers.append("x-access-token", getCookie('token'));
+  headers.append("Content-Type","application/json");
+
+  var requestOptions = {
+    method: 'GET',
+    headers: headers,
+  };
+
+  let res = await fetch('/api/message/sender/'+userId, requestOptions)
+  .catch(err =>{
+    console.log(err)
+  });
+  if(res.status == 200) {
+    let user = await res.json();
+    return user;
+  }
+  
 }

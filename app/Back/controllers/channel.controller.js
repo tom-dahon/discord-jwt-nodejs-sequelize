@@ -48,3 +48,13 @@ exports.getChannels = (req, res) => {
       })
     });
 };
+
+exports.getChannel = (req, res) => {
+    Channel.findByPk(req.params.channelId)
+    .then(channel => {
+      if (!channel) {
+        return res.status(404).send({ message: "Aucun channel n'a été trouvé." });
+      }
+        return res.status(200).send(channel);
+    })
+};
