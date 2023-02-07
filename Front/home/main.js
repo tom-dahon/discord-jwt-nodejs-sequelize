@@ -4,6 +4,7 @@ const form = document.querySelector("form")
 const chatMessages = document.querySelector(".chat__messages")
 const input = document.querySelector(".sendMessage");
 const logoutButton = document.querySelector("#logout");
+const createChannelButton = document.querySelector("#createChannelButton");
 
 //Channels
 const divSideBarUsers = document.getElementById("sidebarConv")
@@ -67,7 +68,54 @@ function logout()
 }
 
 form.addEventListener("submit", sendMessage)
+createChannelButton.addEventListener("click", createChannel);
 
+function getSelectValues(select) {
+  var result = [];
+  var options = select && select.options;
+  var opt;
+
+  for (var i=0, iLen=options.length; i<iLen; i++) {
+    opt = options[i];
+
+    if (opt.selected) {
+      result.push(parseInt(opt.id));
+    }
+  }
+  return result;
+}
+
+async function createChannel(e) {
+  e.preventDefault();
+  let groupName = document.querySelector("#groupName");
+  let usersList = document.querySelector("#valid-was-validated-multiple-field");
+  console.log(getSelectValues(usersList));
+  const data = {
+    "name": groupName.value,
+    "users": getSelectValues(usersList),
+    "loggedUserId": userId
+  };
+        
+  var headers = new Headers();
+  headers.append("x-access-token", getCookie('token'));
+  headers.append("Content-Type","application/json");
+
+  var requestOptions = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(data),
+  };
+        
+  let res = await fetch("/api/channels/createChannel", requestOptions)
+    .catch(err =>{
+        console.log(err)
+    });
+
+  if(res.status == 200) {
+    getChannels();
+  }
+  document
+}
 
 async function sendMessage(e) {
     e.preventDefault();

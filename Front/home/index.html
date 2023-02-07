@@ -36,7 +36,7 @@
       </div>
       <div class="sidebar__icon">
         <i class="fa-solid fa-users"></i>
-        <span>Friends</span>
+        <span>Amis</span>
       </div>
       <div class="sidebar__icon">
         <i class="fas fa-compact-disc fa-lg"></i>
@@ -45,7 +45,7 @@
       <div class="sidebar_users">
         <div class="sidebar__usersHeader">
           <div class="sidebar__header">
-            <h4>Direct messages</h4>
+            <h4>Channels</h4>
           </div>
           <i class="fas fa-plus sidebar__addUser"></i>
         </div>
@@ -109,8 +109,8 @@
 
             <h2>Nom du groupe</h2>
             <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-              <label for="floatingInput">Team</label>
+              <input type="text" class="form-control" id="groupName" placeholder="Nom du groupe">
+              <label for="groupName"></label>
             </div>
 
             <h2>Ajout d'un Utilisateur</h2>
@@ -122,7 +122,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button id="createChannelButton" type="button" class="btn btn-primary" data-bs-dismiss="modal">Créer</button>
           </div>
         </div>
       </div>

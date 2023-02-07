@@ -8,14 +8,18 @@ exports.createChannel = (req, res) => {
     Channel.create({
         name: req.body.name
     }).then(channel => {
-        req.body.users.forEach(user => {
-            console.log(user.id);
+      console.log(req.body.users);
+        ChannelUsers.create({
+          channelId: channel.dataValues.id,
+          userId: req.body.loggedUserId
+        })
+        req.body.users.forEach(userId => {
             ChannelUsers.create({
                 channelId: channel.dataValues.id,
-                userId: user.id
+                userId: userId
             });
         });
-        res.status(200).send("OK"); 
+        res.status(200).send(channel); 
     });
 };
 
