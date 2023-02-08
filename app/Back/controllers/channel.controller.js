@@ -3,9 +3,11 @@ const User = db.user;
 const Message = db.message;
 const Channel = db.channel;
 const ChannelUsers = db.channel_users;
+const Sequelize = require('sequelize');
+const op = Sequelize.Op;
 
 exports.createChannel = (req, res) => {
-  // Créer un channel avec les users passés en paramètre, ainsi que le user connecté
+  // Créer un channel avec les users passés dans le body, ainsi que le user connecté
     Channel.create({
         name: req.body.name
     }).then(channel => {
@@ -65,4 +67,22 @@ exports.getChannel = (req, res) => {
       }
         return res.status(200).send(channel);
     })
+};
+
+exports.searchChannel = (req, res) => {
+  // Recherche un channel dont le nom correspond au channelName passé dans le body
+  Channel.findAll({
+    where: {
+      name: {
+        [op.like]: "%" + req.body.channelName + "%"
+      } 
+    }
+  })
+  .then(channels => {
+    console.log(channels);
+    if(!channels) {
+      return res.status(404).send({ message: "Aucun channel n'a été trouvé." });
+    }
+    return res.status(200).send(channels);
+  });
 };

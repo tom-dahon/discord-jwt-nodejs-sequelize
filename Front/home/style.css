@@ -82,7 +82,7 @@ img {
     background-color: #2f3135;
     color: #fff;
     border-bottom: 2px solid #26282c;
-    height: 20px;
+    height: 50px;
 }
 
 .sidebar__top > input {
@@ -94,7 +94,7 @@ img {
     background-color: #1d1d1d;
     border-radius: 3px;
     padding: 5px;
-    width: 90%;
+    width: 100%;
 }
 
 .sidebar__icon {

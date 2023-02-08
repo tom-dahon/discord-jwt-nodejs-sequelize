@@ -22,45 +22,22 @@ function validateEmail(email) {
 
 exports.signup = (req, res) => {
   if(validateEmail(req.body.email)) {
-
-  User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
-  })
-    .then(user => {
-      let token = jwt.sign({ username: user.username }, config.secret, {
-        expiresIn: 86400 // 24 hours
-      });
-      /*if (req.body.roles) {
-        Role.findAll({
-          where: {
-            name: {
-              [Op.or]: req.body.roles
-            }
-          }
-        }).then(roles => {
-          user.setRoles(roles).then(() => {
-            res.status(200).send({
-              message: "User registered successfully!",
-              accessToken: token
-            });
-          });
+      User.create({
+        username: req.body.username,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 8),
+        roleId: req.body.roleId
+      })
+      .then(user => {
+        let token = jwt.sign({ username: user.username }, config.secret, {
+          expiresIn: 86400 // 24 hours
         });
-      } else {
-        // user role = 1
-        user.setRoles([0]).then(() => {
-          res.status(200).send({
-            message: "User registered successfully!",
-            accessToken: token
-          });
+        res.status(200).send({
+          id: user.id,
+          message: "Utilisateur bien enregistré !",
+          accessToken: token
         });
-      }*/
-      res.status(200).send({
-        message: "Utilisateur bien enregistré !",
-        accessToken: token
-      });
-    })
+      })
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
@@ -71,6 +48,9 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = (req, res) => {
+  /* Cherche si le username correspond à un utilisateur existant, puis compare le 
+  password passé dans le body avec le mot de passe lié à l'utilisateur en base de données
+  return le user si cela correspond */
   User.findOne({
     where: {
       username: req.body.username
@@ -96,18 +76,11 @@ exports.signin = (req, res) => {
         expiresIn: 86400 // 24 hours
       });
 
-      var authorities = [];
-      user.getRoles().then(roles => {
-        for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].name.toUpperCase());
-        }
-        res.status(200).send({
+      res.status(200).send({
           id: user.id,
           username: user.username,
           email: user.email,
-          roles: authorities,
           accessToken: token
-        });
       });
     })
     .catch(err => {

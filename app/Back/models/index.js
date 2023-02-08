@@ -36,18 +36,11 @@ db.user.belongsToMany(db.channel, {
   otherKey: "channelId"
 });
 
-db.role.belongsToMany(db.user, {
-  through: "user_roles",
-  foreignKey: "roleId",
-  otherKey: "userId"
-});
-db.user.belongsToMany(db.role, {
-  through: "user_roles",
-  foreignKey: "userId",
-  otherKey: "roleId"
+db.user.hasOne(db.role, {
+  foreignKey: "roleId"
 });
 
-db.ROLES = ["user", "admin", "moderator"];
+db.ROLES = ["invite", "admin", "moderator"];
 
 module.exports = db;
 

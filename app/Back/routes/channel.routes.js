@@ -27,4 +27,9 @@ module.exports = function(app) {
   controller.createChannel
   );
 
+  app.post("/api/channels/search",
+  [authJwt.verifyToken],
+  controller.searchChannel
+  );
+
 };

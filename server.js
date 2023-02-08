@@ -47,19 +47,16 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-function initial() {
+app.on('listening', function () {
   Role.create({
-    id: 1,
-    name: "user"
+    name: "invite"
   });
- 
+
   Role.create({
-    id: 2,
     name: "moderator"
   });
- 
+  
   Role.create({
-    id: 3,
     name: "admin"
-  });
-}
+  })
+});

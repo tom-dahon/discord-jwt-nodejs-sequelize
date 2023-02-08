@@ -35,4 +35,16 @@ module.exports = function(app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+
+  app.post(
+    "/api/users/profile_picture",
+    [authJwt.verifyToken],
+    controller.profilePicture
+  );
+
+  /*app.post(
+    "/api/role",
+    [authJwt.verifyToken],
+    controller.getRole
+  ) */
 };

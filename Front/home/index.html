@@ -32,7 +32,7 @@
 
     <div class="sidebar">
       <div class="sidebar__top">
-        <input type="text" placeholder="Find or start a conversation" />
+          <input id="searchInput" type="search" name="search" placeholder="Chercher un channel" />
       </div>
       <div class="sidebar__icon">
         <i class="fa-solid fa-users"></i>
@@ -47,7 +47,7 @@
           <div class="sidebar__header">
             <h4>Channels</h4>
           </div>
-          <i class="fas fa-plus sidebar__addUser"></i>
+          <i type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-plus sidebar__addUser"></i>
         </div>
         <div id="sidebarConv">
 
@@ -56,7 +56,7 @@
       <div class="sidebar__profile">
         <div>
           <span class="status"></span>
-          <img src="../assets/avatar.png" alt="avatar" />
+          <img id="avatar" src="../assets/avatar.png" alt="avatar" />
         </div>
         <div class="sidebar__profileInfo">
           <h3 id="currentUsername"></h3>
@@ -65,10 +65,33 @@
         <div class="sidebar__profileIcons">
           <i class="fas fa-microphone"></i>
           <i class="fas fa-headset"></i>
-          <i class="fas fa-cog"></i>
+            <i id="settingsButton" type="button"  data-bs-toggle="modal" data-bs-target="#settingsModal" class="fas fa-cog"></i>
         </div>
       </div>
     </div>
+
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="settingsModalLabel">Paramètres</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+
+        <h2>Photo de profil</h2>
+        <div class="form-floating mb-3">
+          <input type="file" class="form-control" id="profile_picture">
+        </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="addProfilePicture" type="button" class="btn btn-primary" data-bs-dismiss="modal">Ajouter photo de profil</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>  
 
     <div class="chat">
       <div>
@@ -78,9 +101,9 @@
           </div>
           <div class="endDiv">
             <button id="newChannel" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              <i class="fa-solid fa-user-plus"></i>
+              <i style="color: white;" class="fa-solid fa-user-plus"></i>
             </button>
-            <button id="logout" type="button" class="btn btn-dark btn-sm flex-row-reverse">LOGOUT</button>
+            <button id="logout" type="button" class="btn btn-dark btn-sm flex-row-reverse">Déconnexion</button>
           </div>
         </div>
       </div>
@@ -91,7 +114,7 @@
       <div class="chat__input">
         <i class="fas fa-plus-circle fa-lg"></i>
         <form>
-            <input class="sendMessage" type="text" placeholder="send message">
+            <input class="sendMessage" type="text" placeholder="Envoyer un message">
             <button class="chat__inputButton" type="submit">Envoyer</button>
         </form>
       </div>
@@ -127,6 +150,7 @@
         </div>
       </div>
     </div>
+    </div>  
 
     <script type="module" src="./main.js"></script>
   </body>

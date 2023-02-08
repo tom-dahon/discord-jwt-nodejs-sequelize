@@ -3,6 +3,7 @@ const Message = db.message;
 const User = db.user;
 
 exports.getMessagesFromChannel = (req, res) => {
+    // Récupère tous les messages dont le channelId correspond au channelId passé dans le body
     Message.findAll({
         where: {
             channelId: req.params.channelId
@@ -19,6 +20,7 @@ exports.getMessagesFromChannel = (req, res) => {
 };
 
 exports.sendMessage = (req, res) => { 
+    // Créé un message avec un texte, un userId et un channelId passé dans le body, retourne le message
     Message.create({
         text: req.body.text,
         userId: req.body.userId,
@@ -29,6 +31,7 @@ exports.sendMessage = (req, res) => {
 };
 
 exports.deleteMessage = (req, res) => {
+    // Trouve un message avec l'id passé dans le body, puis le supprime
     Message.findByPk(req.body.id).then(message => {
         if (!message) {
             return res.status(404).send({ message: "Aucun message n'a été trouvé." });
@@ -39,6 +42,7 @@ exports.deleteMessage = (req, res) => {
 };
 
 exports.getSender = (req, res) => {
+    // Récupère le user qui a envoyé un message avec un userId passé dans le body
     User.findByPk(req.params.userId)
         .then(user => {
             if(!user) {
