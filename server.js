@@ -45,9 +45,7 @@ require('./app/Back/routes/message.routes')(app);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
-});
-
-app.on('listening', function () {
+  Role.truncate();
   Role.create({
     name: "invite"
   });
@@ -60,3 +58,4 @@ app.on('listening', function () {
     name: "admin"
   })
 });
+
