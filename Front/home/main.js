@@ -11,13 +11,14 @@ const divSideBarUsers = document.getElementById("sidebarConv")
 let id;
 let currentChannel;
 let userId;
+let user;
 
 
 //https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
 window.onload=init;
 
 
-async function getUsers() {
+async function fillUsersSelect() {
   var headers = new Headers();
   headers.append("x-access-token", getCookie('token'));
   headers.append("Content-Type","application/json");
@@ -33,25 +34,28 @@ async function getUsers() {
   });
   if(res.status == 200) {
     let users = await res.json();
-    return users;
+    users.forEach(user => {
+      //Ajouter une option dans le select pour chaque user
+      let userOption = document.createElement("option");
+      userOption.id = user.id;
+      userOption.innerHTML = user.username;
+      document.querySelector("#valid-was-validated-multiple-field").appendChild(userOption);
+    });
   }
   
 }
 
 async function init() {
   getChannels();
+  fillUsersSelect();
   userId = getCookie('userId');
-  let users = await getUsers();
-  console.log(users);
-  users.forEach(user => {
-    //Ajouter une option dans le select pour chaque user
-    let userOption = document.createElement("option");
-    userOption.id = user.id;
-    userOption.innerHTML = user.username;
-    document.querySelector("#valid-was-validated-multiple-field").appendChild(userOption);
-  });
+  const username = document.getElementById("currentUsername");
+  const userTag = document.getElementById("userTag");
+  user = await getUser(userId);
+  username.innerText = user.username;
+  userTag.innerText = "#" + user.id;
 
-  console.log(users);
+  
 }
 
 // if(checkCookie()==null){
@@ -114,7 +118,13 @@ async function createChannel(e) {
   if(res.status == 200) {
     getChannels();
   }
-  document
+ /*usersList.selectedIndex = 0;
+  while(usersList.firstElementChild) {
+    usersList.firstElementChild.remove();
+ }*/
+ 
+ groupName.value = "";
+ fillUsersSelect();
 }
 
 async function sendMessage(e) {
@@ -154,6 +164,7 @@ $( '#valid-was-validated-single-field' ).select2( {
   theme: "bootstrap-5",
   width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
   placeholder: $( this ).data( 'placeholder' ),
+  allowClear: true
 } );
 
 $( '#valid-was-validated-multiple-field' ).select2( {

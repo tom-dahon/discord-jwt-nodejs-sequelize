@@ -16,10 +16,11 @@ verifyToken = (req, res, next) => {
     if (err) {
       return res.status(401).send({
         message: "Unauthorized!"
-      });
+      }); 
     }
-    req.username = decoded.username;
-    next();
+      req.username = decoded.username;
+      next();
+    
   });
 };
 

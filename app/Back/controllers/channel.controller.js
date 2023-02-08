@@ -5,6 +5,7 @@ const Channel = db.channel;
 const ChannelUsers = db.channel_users;
 
 exports.createChannel = (req, res) => {
+  // Créer un channel avec les users passés en paramètre, ainsi que le user connecté
     Channel.create({
         name: req.body.name
     }).then(channel => {
@@ -25,6 +26,7 @@ exports.createChannel = (req, res) => {
 
 
 exports.getUsersFromChannel = (req, res) => {
+  // Récupérer tous les utilisateurs d'un channel excepté celui qui est connecté
     ChannelUsers.findAll({
         where: {
             channelId: req.body.channelId
@@ -38,6 +40,7 @@ exports.getUsersFromChannel = (req, res) => {
 };
 
 exports.getChannels = (req, res) => {
+  // Récupérer tous les channels auxquels l'utilisateur connecté a accès
     User.findOne({
     where: {
       username: req.username
@@ -54,6 +57,7 @@ exports.getChannels = (req, res) => {
 };
 
 exports.getChannel = (req, res) => {
+  // Récupérer un channel avec son id passé dans l'url
     Channel.findByPk(req.params.channelId)
     .then(channel => {
       if (!channel) {

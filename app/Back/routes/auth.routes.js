@@ -10,14 +10,6 @@ module.exports = function(app) {
     next();
   });
 
-  app.get('/signin', function(req, res) {
-    res.render('signin.html');
-  });
-
-  app.get('/signup', function(req, res) {
-    res.render('signup.html');
-  });
-
   app.post(
     "/api/auth/signup",
     [

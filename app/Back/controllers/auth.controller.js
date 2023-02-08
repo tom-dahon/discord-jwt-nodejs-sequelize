@@ -57,7 +57,7 @@ exports.signup = (req, res) => {
         });
       }*/
       res.status(200).send({
-        message: "User registered successfully!",
+        message: "Utilisateur bien enregistré !",
         accessToken: token
       });
     })
