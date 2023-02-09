@@ -24,11 +24,11 @@ window.onload=init;
 
 //Recupération la liste des utilisateur du chat
 async function getUserList() {
-  var headers = new Headers();
+  let headers = new Headers();
   headers.append("x-access-token", getCookie('token'));
   headers.append("Content-Type","application/json");
 
-  var requestOptions = {
+  let requestOptions = {
       method: 'GET',
       headers: headers,
   };
@@ -50,11 +50,11 @@ async function searchChannels() {
     "channelName": searchInput.value,
   };
         
-  var headers = new Headers();
+  let headers = new Headers();
   headers.append("x-access-token", getCookie('token'));
   headers.append("Content-Type","application/json");
 
-  var requestOptions = {
+  let requestOptions = {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(data),
@@ -159,7 +159,7 @@ async function fillUsersSelect() {
 
 //Initialisation de la page
 async function init() {
-  if(history.state.channelId) {
+  if(history.state?.channelId) {
     let channel = await getChannelById(history.state.channelId);
     getMessage(channel)
   }
@@ -255,11 +255,11 @@ async function getChannelById(channelId) {
 }
 
 function getSelectValues(select) {
-  var result = [];
-  var options = select && select.options;
-  var opt;
+  let result = [];
+  let options = select && select.options;
+  let opt;
 
-  for (var i=0, iLen=options.length; i<iLen; i++) {
+  for (let i=0, iLen=options.length; i<iLen; i++) {
     opt = options[i];
 
     if (opt.selected) {
@@ -368,11 +368,11 @@ $(document).ready(function() {
 
 //CREATION DE LA LISTE DES CHANNELS
 async function getChannels(){
-var myHeaders = new Headers();
+let myHeaders = new Headers();
 myHeaders.append("x-access-token", getCookie('token'));
 myHeaders.append("Content-Type","application/json");
 
-var requestOptions = {
+let requestOptions = {
   method: 'GET',
   headers: myHeaders,
 };
@@ -383,7 +383,7 @@ let res = await fetch("/api/channels", requestOptions)
    dispatch(loginFailed())
 });
 
-var data = await res.json();
+let data = await res.json();
 
 data.forEach(channel => {
       console.log(`${channel.createdAt}`);
@@ -392,9 +392,7 @@ data.forEach(channel => {
       divConv.id = 'channel'+channel.id; // L'id de chaque div de channel sera channel{id}
       divConv.addEventListener('click', () => getMessage(channel))
       divConv.setAttribute('class','sidebar__user')
-      if(history.state.channelId == channel.id) {
-        divConv.style = 'background-color: #40464b';
-      }
+      
       const div = document.createElement('div')
       const span = document.createElement('span')
       span.setAttribute('class','status')
@@ -423,10 +421,22 @@ async function getMessage(channel){
   if(channel) {
   id = channel.id;
   currentChannel = channel;
+  
   const state = { 'channelId': id };
   const pageUrl = window.location.href;
   history.pushState(state, '', pageUrl);
 
+  const divConv = document.getElementById("channel"+id);
+  
+  const alldivConv = document.getElementsByClassName("sidebar__user");
+  if (alldivConv){
+    for (const conv of alldivConv){
+      conv.style = 'background-color: #2f3135';
+   }
+  }
+  if(divConv) {
+    divConv.style = 'background-color: #40464b';
+  }
   document.getElementById('channelName').innerText = channel.name
   let url= '/api/channels/'+channel.id+'/messages'
   let myHeaders = new Headers();
@@ -462,7 +472,7 @@ async function getMessage(channel){
     messageInfo.className = "message__info"
 
     let userInfo = document.createElement("h4")
-    userInfo.innerHTML = user.username + " [" + userRole + "]"
+    userInfo.innerHTML = user?.username + " [" + userRole + "]"
 
     let messageTimestamp = document.createElement("span")
     messageTimestamp.className = "message__timestamp"
@@ -496,11 +506,11 @@ async function getMessage(channel){
 
 //Récupération de l'utilisateur par son id pour l'utiliser
 async function getUser(userId) {
-  var headers = new Headers();
+  let headers = new Headers();
   headers.append("x-access-token", getCookie('token'));
   headers.append("Content-Type","application/json");
 
-  var requestOptions = {
+  let requestOptions = {
     method: 'GET',
     headers: headers,
   };
