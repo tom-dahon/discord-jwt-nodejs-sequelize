@@ -16,6 +16,12 @@ module.exports = function(app) {
     controller.getChannels
   );
 
+  app.post(
+    "/api/channels/first",
+    [authJwt.verifyToken],
+    controller.firstChannel
+  );
+
   app.get(
     "/api/channels/:channelId",
     [authJwt.verifyToken],

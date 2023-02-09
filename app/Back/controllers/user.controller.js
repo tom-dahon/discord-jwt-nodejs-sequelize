@@ -20,6 +20,13 @@ exports.moderatorBoard = (req, res) => {
   res.status(200).send("Moderator Content.");
 };
 
+exports.userList = (req, res) => {
+  User.findAll()
+  .then(users => {
+    res.status(200).send(users); 
+  });
+};
+
 exports.allUsers = (req, res) => {
   //Récupère tous les utilisateurs sauf l'utilisateur en cours
   User.findAll({

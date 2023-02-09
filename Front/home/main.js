@@ -11,7 +11,7 @@ const settingsButton = document.querySelector("#settingsButton");
 const avatar = document.querySelector("#avatar");
 
 let userRole = 3;
-
+let usersList;
 //Channels
 const divSideBarUsers = document.getElementById("sidebarConv")
 let id;
@@ -21,6 +21,26 @@ let user;
 
 window.onload=init;
 
+async function getUserList() {
+  var headers = new Headers();
+  headers.append("x-access-token", getCookie('token'));
+  headers.append("Content-Type","application/json");
+
+  var requestOptions = {
+      method: 'GET',
+      headers: headers,
+  };
+        
+  let res = await fetch("/api/users/list", requestOptions)
+    .catch(err =>{
+        console.log(err)
+    });
+
+    if(res.status == 200) {
+      let users = await res.json();
+      usersList = users;
+    }
+}
 
 async function searchChannels() {
   const data = {
@@ -133,7 +153,34 @@ async function fillUsersSelect() {
   }
 }*/
 
+async function getFirstChannel(username) {
+  const data = {
+    "username": username,
+  };
+        
+  var headers = new Headers();
+  headers.append("x-access-token", getCookie('token'));
+  headers.append("Content-Type","application/json");
+
+  var requestOptions = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(data),
+  };
+        
+  let res = await fetch("/api/channels/first", requestOptions)
+    .catch(err =>{
+        console.log(err)
+    });
+
+  if(res.status == 200) {
+    let channel = await res.json();
+    currentChannel = channel;
+}
+}
+
 async function init() {
+  usersList = getUserList();
   const roles = {1: "Admin", 2: "Modérateur", 3: "Invité"}
   getChannels();
   fillUsersSelect();
@@ -141,6 +188,12 @@ async function init() {
   const username = document.getElementById("currentUsername");
   const userTag = document.getElementById("userTag");
   user = await getUser(userId);
+  getFirstChannel();
+  (function my_func() {
+    getMessage(currentChannel)
+    setTimeout( my_func, 200 );
+})();
+  //setInterval(getMessage(currentChannel), 5000);
   let roleName = roles[user.roleId];
   userRole = roleName;
   username.innerText = user.username;
@@ -225,11 +278,11 @@ async function createChannel(e) {
     "loggedUserId": userId
   };
         
-  var headers = new Headers();
+  const headers = new Headers();
   headers.append("x-access-token", getCookie('token'));
   headers.append("Content-Type","application/json");
 
-  var requestOptions = {
+  const requestOptions = {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(data),
@@ -257,14 +310,14 @@ async function sendMessage(e) {
 
     if(input.value !== "") {
         //Enregistrement du message au niveau du backend
-        var url='/api/channels/'+id+'/sendMessage';
+        let url='/api/channels/'+id+'/sendMessage';
         const data = { "text": input.value,"userId": userId };
         
-        var myHeaders = new Headers();
+        const myHeaders = new Headers();
         myHeaders.append("x-access-token", getCookie('token'));
         myHeaders.append("Content-Type","application/json");
 
-        var requestOptions = {
+        const requestOptions = {
           method: 'POST',
           headers: myHeaders,
           body: JSON.stringify(data),
@@ -361,6 +414,7 @@ data.forEach(channel => {
 
 //RECUPERATION DES MESSAGES POUR UNE CONVERSTION DONNEE
 async function getMessage(channel){
+  if(channel) {
   id = channel.id;
   currentChannel = channel;
   document.getElementById('channelName').innerText = channel.name
@@ -387,7 +441,7 @@ async function getMessage(channel){
  if (data != null){
   data.forEach(async obj => {
     
-    let user = await getUser(obj.userId);
+    let user = usersList[(obj.userId) - 1];
     var messageDiv = document.createElement("div")
     messageDiv.className = "message"
 
@@ -423,8 +477,9 @@ async function getMessage(channel){
     chatMessages.appendChild(messageDiv)
     chatMessages.scrollBy(0, 10000)
 
-  })
+  });
  }
+}
 }
 
 async function getUser(userId) {

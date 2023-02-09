@@ -36,6 +36,12 @@ module.exports = function(app) {
     controller.adminBoard
   );
 
+  app.get(
+    "/api/users/list",
+    [authJwt.verifyToken],
+    controller.userList
+  );
+
   app.post(
     "/api/users/profile_picture",
     [authJwt.verifyToken],
