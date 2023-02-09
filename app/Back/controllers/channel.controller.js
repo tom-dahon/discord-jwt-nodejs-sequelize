@@ -86,20 +86,3 @@ exports.searchChannel = (req, res) => {
     return res.status(200).send(channels);
   });
 };
-
-exports.firstChannel = (req, res) => {
-  //Renvoie le premier channel appartenant à l'utilisateur spécifié dans le body
-  User.findOne({
-    where: {
-      username: req.username
-    }
-  })
-    .then(user => {
-      if (!user) {
-        return res.status(404).send({ message: "Aucun utilisateur n'a été trouvé." });
-      }
-      user.getChannels().then(function(channels) {
-        return res.status(200).send(channels[0]["channel_users"]);
-      })
-    });
-};

@@ -153,32 +153,6 @@ async function fillUsersSelect() {
   }
 }*/
 
-async function getFirstChannel(username) {
-  const data = {
-    "username": username,
-  };
-        
-  var headers = new Headers();
-  headers.append("x-access-token", getCookie('token'));
-  headers.append("Content-Type","application/json");
-
-  var requestOptions = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(data),
-  };
-        
-  let res = await fetch("/api/channels/first", requestOptions)
-    .catch(err =>{
-        console.log(err)
-    });
-
-  if(res.status == 200) {
-    let channel = await res.json();
-    currentChannel = channel;
-}
-}
-
 async function init() {
   usersList = getUserList();
   const roles = {1: "Admin", 2: "Modérateur", 3: "Invité"}
@@ -188,7 +162,6 @@ async function init() {
   const username = document.getElementById("currentUsername");
   const userTag = document.getElementById("userTag");
   user = await getUser(userId);
-  getFirstChannel();
   (function my_func() {
     getMessage(currentChannel)
     setTimeout( my_func, 200 );
@@ -418,12 +391,12 @@ async function getMessage(channel){
   id = channel.id;
   currentChannel = channel;
   document.getElementById('channelName').innerText = channel.name
-  var url= '/api/channels/'+channel.id+'/messages'
-  var myHeaders = new Headers();
+  let url= '/api/channels/'+channel.id+'/messages'
+  let myHeaders = new Headers();
   myHeaders.append("x-access-token", getCookie('token'));
   myHeaders.append("Content-Type","application/json");
 
-  var requestOptions = {
+  const requestOptions = {
     method: 'GET',
     headers: myHeaders,
   };
@@ -434,7 +407,7 @@ async function getMessage(channel){
     dispatch(loginFailed())
   });
 
-  var data = await res.json();
+  let data = await res.json();
   //enlever tous les messages
   document.querySelectorAll(".message").forEach(el => el.remove());
 
@@ -442,27 +415,29 @@ async function getMessage(channel){
   data.forEach(async obj => {
     
     let user = usersList[(obj.userId) - 1];
-    var messageDiv = document.createElement("div")
+    let messageDiv = document.createElement("div")
     messageDiv.className = "message"
 
-    var avatar = document.createElement("img")
+    let avatar = document.createElement("img")
     avatar.src = "../assets/avatar.png"
 
-    var messageInfo = document.createElement("div")
+    let messageInfo = document.createElement("div")
     messageInfo.className = "message__info"
 
-    var userInfo = document.createElement("h4")
+    let userInfo = document.createElement("h4")
     userInfo.innerHTML = user.username + " [" + userRole + "]"
 
-    var messageTimestamp = document.createElement("span")
+    let messageTimestamp = document.createElement("span")
     messageTimestamp.className = "message__timestamp"
-
-    const date = new Date()
-    const year = date.getFullYear()
-    const month = String(date.getMonth()).padStart(2, "0")
-    const day = String(date.getDate()).padStart(2, "0")
-
-    messageTimestamp.innerHTML = obj.createdAt
+    
+    const date = new Date(obj.createdAt);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() +1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    messageTimestamp.innerHTML = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
 
     const message = document.createElement("p")
     message.textContent = obj.text
