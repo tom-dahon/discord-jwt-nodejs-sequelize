@@ -21,6 +21,8 @@ let user;
 
 window.onload=init;
 
+
+//Recupération la liste des utilisateur du chat
 async function getUserList() {
   var headers = new Headers();
   headers.append("x-access-token", getCookie('token'));
@@ -42,6 +44,7 @@ async function getUserList() {
     }
 }
 
+//Récupération des channels
 async function searchChannels() {
   const data = {
     "channelName": searchInput.value,
@@ -101,7 +104,7 @@ async function searchChannels() {
 }
 
 
-
+//Popup creation de la liste des utilisateurs dans la popup creation de channel
 async function fillUsersSelect() {
   let headers = new Headers();
   headers.append("x-access-token", getCookie('token'));
@@ -153,6 +156,7 @@ async function fillUsersSelect() {
   }
 }*/
 
+//Récupérer le premier channel 
 async function getFirstChannel(username) {
   const data = {
     "username": username,
@@ -179,6 +183,7 @@ async function getFirstChannel(username) {
 }
 }
 
+//Initialisation de la page
 async function init() {
   usersList = getUserList();
   const roles = {1: "Admin", 2: "Modérateur", 3: "Invité"}
@@ -305,6 +310,7 @@ async function createChannel(e) {
  fillUsersSelect();
 }
 
+//Envoyer un message en récupérant le input
 async function sendMessage(e) {
     e.preventDefault();
 
@@ -338,6 +344,7 @@ async function sendMessage(e) {
 }
 
 
+//Popup select bootstrap
 $( '#valid-was-validated-single-field' ).select2( {
   theme: "bootstrap-5",
   width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
@@ -482,6 +489,7 @@ async function getMessage(channel){
 }
 }
 
+//Récupération de l'utilisateur par son id pour l'utiliser
 async function getUser(userId) {
   var headers = new Headers();
   headers.append("x-access-token", getCookie('token'));
