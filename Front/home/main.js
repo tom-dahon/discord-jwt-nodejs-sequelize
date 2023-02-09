@@ -156,34 +156,13 @@ async function fillUsersSelect() {
   }
 }*/
 
-async function getFirstChannel(username) {
-  const data = {
-    "username": username,
-  };
-        
-  var headers = new Headers();
-  headers.append("x-access-token", getCookie('token'));
-  headers.append("Content-Type","application/json");
-
-  var requestOptions = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(data),
-  };
-        
-  let res = await fetch("/api/channels/first", requestOptions)
-    .catch(err =>{
-        console.log(err)
-    });
-
-  if(res.status == 200) {
-    let channel = await res.json();
-    currentChannel = channel;
-}
-}
 
 //Initialisation de la page
 async function init() {
+  if(history.state.channelId) {
+    let channel = await getChannelById(history.state.channelId);
+    getMessage(channel)
+  }
   usersList = getUserList();
   const roles = {1: "Admin", 2: "Modérateur", 3: "Invité"}
   getChannels();
@@ -254,6 +233,26 @@ function logout()
 
 form.addEventListener("submit", sendMessage)
 createChannelButton.addEventListener("click", createChannel);
+
+async function getChannelById(channelId) {
+  let headers = new Headers();
+  headers.append("x-access-token", getCookie('token'));
+  headers.append("Content-Type","application/json");
+
+  let requestOptions = {
+    method: 'GET',
+    headers: headers,
+  };
+
+  let res = await fetch('/api/channels/' + channelId, requestOptions)
+  .catch(err =>{
+    console.log(err)
+  });
+  if(res.status == 200) {
+    let channel = await res.json();
+    return channel;
+  }
+}
 
 function getSelectValues(select) {
   var result = [];
@@ -392,8 +391,10 @@ data.forEach(channel => {
       const divConv = document.createElement('div')
       divConv.id = 'channel'+channel.id; // L'id de chaque div de channel sera channel{id}
       divConv.addEventListener('click', () => getMessage(channel))
-
       divConv.setAttribute('class','sidebar__user')
+      if(history.state.channelId == channel.id) {
+        divConv.style = 'background-color: #40464b';
+      }
       const div = document.createElement('div')
       const span = document.createElement('span')
       span.setAttribute('class','status')
@@ -422,6 +423,10 @@ async function getMessage(channel){
   if(channel) {
   id = channel.id;
   currentChannel = channel;
+  const state = { 'channelId': id };
+  const pageUrl = window.location.href;
+  history.pushState(state, '', pageUrl);
+
   document.getElementById('channelName').innerText = channel.name
   let url= '/api/channels/'+channel.id+'/messages'
   let myHeaders = new Headers();
