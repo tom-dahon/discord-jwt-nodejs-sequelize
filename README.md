@@ -1,11 +1,16 @@
-# Projet JS
- 
-Initialisation :
+<a name="discord-Nodejs"></a>
 
-npm install
+## ABOUT THE PROJECT
+fonctionnalités :
+- Login, Signup
+* Add conversation
++ Send messages
 
-Pour lancer :
+### Built With
+Nodejs - Vue.js - Bootstrap
 
-Pour plus d'informations, regarder la doc : https://docs.google.com/document/d/1aRtTNKvZxkRN5dUtHJMmGYbCCAP5gxmArhLUZIFN8ng
-
-node server.js ou nodemon server.js si nodemon est installé.
+<p align="center">
+  <img src="./images/1.png" width="500" title="hover text">
+  <img src="./images/2.png" width="500" alt="accessibility text">
+  <img src="./images/3.png" width="500" title="hover text">
+</p>
